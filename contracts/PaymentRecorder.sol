@@ -8,6 +8,31 @@ contract PaymentRecorder {
         uint256 timestamp;
     }
 
+     struct Student {
+        string studentId;
+        string fullName;
+        address walletAddress;
+    }
+
+    // Mapping to store registered students
+    mapping(string => Student) public students;
+
+    // Event to notify registration of a student
+    event StudentRegistered(string studentId, string fullName, address walletAddress);
+
+    // Function to register a student
+    function registerStudent(string memory studentId, string memory fullName, address walletAddress) public {
+        require(students[studentId].walletAddress == address(0), "Student already registered");
+
+        students[studentId] = Student({
+            studentId: studentId,
+            fullName: fullName,
+            walletAddress: walletAddress
+        });
+
+        emit StudentRegistered(studentId, fullName, walletAddress);
+    }
+
     Payment[] public payments;
 
     event PaymentMade(address indexed payer, uint256 amount, uint256 timestamp);
