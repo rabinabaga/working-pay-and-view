@@ -2,18 +2,16 @@ const hre = require("hardhat");
 
 async function main() {
   // Get the contract factory for PaymentRecorder
-  const PaymentRecorder = await hre.ethers.getContractFactory(
-    "PaymentRecorder"
-  );
+  const FeeManagement = await hre.ethers.getContractFactory("FeeManagement");
 
   // Deploy the PaymentRecorder contract
-  const paymentRecorder = await PaymentRecorder.deploy();
+  const feeManagement = await FeeManagement.deploy();
 
   // Wait for the contract to be deployed
-  await paymentRecorder.waitForDeployment();
+  await feeManagement.waitForDeployment();
 
   // Log the deployed contract address
-  console.log("PaymentRecorder deployed to:", paymentRecorder.target);
+  console.log("Fee Management deployed to:", feeManagement.target);
 }
 
 // Run the deployment script
