@@ -17,6 +17,9 @@ contract PaymentRecorder {
     // Mapping to store registered students
     mapping(string => Student) public students;
 
+     // Array to track all student IDs for iteration
+    string[] public studentIds;
+
     // Event to notify registration of a student
     event StudentRegistered(string studentId, string fullName, address walletAddress);
 
@@ -30,7 +33,22 @@ contract PaymentRecorder {
             walletAddress: walletAddress
         });
 
+            // Track the student ID in the array
+        studentIds.push(studentId);
+
         emit StudentRegistered(studentId, fullName, walletAddress);
+    }
+
+
+    // Function to return all students
+    function getStudents() public view returns (Student[] memory) {
+        Student[] memory allStudents = new Student[](studentIds.length);
+
+        for (uint256 i = 0; i < studentIds.length; i++) {
+            allStudents[i] = students[studentIds[i]];
+        }
+
+        return allStudents;
     }
 
     Payment[] public payments;
@@ -48,4 +66,5 @@ contract PaymentRecorder {
     function getPayments() external view returns (Payment[] memory) {
         return payments;
     }
+
 }
