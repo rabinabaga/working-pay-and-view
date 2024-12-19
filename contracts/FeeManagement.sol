@@ -57,8 +57,13 @@ _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
         if (keccak256(abi.encodePacked(role)) == keccak256(abi.encodePacked("Accountant"))) {
             _grantRole(ACCOUNTANT_ROLE, userAddress);
         }
-        console.log("registering user",fullName,role);
         emit UserRegistered(userAddress, fullName, role);
+    }
+
+        // Fetch User by MetaMask address
+    function getUser() public view returns (User memory) {
+        require(bytes(users[msg.sender].fullName).length > 0, "User not registered");
+        return users[msg.sender];
     }
 
     // Accountant enters fee details
