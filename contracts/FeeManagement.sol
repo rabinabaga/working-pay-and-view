@@ -35,7 +35,7 @@ contract FeeManagement is AccessControl {
     event UserRegistered(address userAddress, string fullName, string role);
     event FeeEntered(string faculty, string semester, uint256 feeAmount);
     event ReceiptGenerated(string studentId, string faculty, string semester, uint256 feeAmount, uint256 timestamp);
-
+    event Debug(string message, string fullName, string role);
     // Constructor: Assigns deployer as Admin
     constructor() {
 _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
@@ -52,16 +52,18 @@ _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
         require(bytes(users[userAddress].fullName).length == 0, "User already registered");
         users[userAddress] = User(fullName, role);
 
+
         // Assign ACCOUNTANT_ROLE if role is Accountant
         if (keccak256(abi.encodePacked(role)) == keccak256(abi.encodePacked("Accountant"))) {
             _grantRole(ACCOUNTANT_ROLE, userAddress);
         }
-
+        console.log("registering user",fullName,role);
         emit UserRegistered(userAddress, fullName, role);
     }
 
     // Accountant enters fee details
     function enterFee(string memory faculty, string memory semester, uint256 feeAmount) public onlyRole(ACCOUNTANT_ROLE) {
+         emit FeeEntered(faculty, semester, feeAmount);
         fees[string(abi.encodePacked(faculty, semester))] = FeeRecord(faculty, semester, feeAmount, block.timestamp);
         emit FeeEntered(faculty, semester, feeAmount);
     }
