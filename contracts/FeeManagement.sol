@@ -62,8 +62,13 @@ _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
 
         // Fetch User by MetaMask address
     function getUser() public view returns (User memory) {
+        if(hasRole(DEFAULT_ADMIN_ROLE,msg.sender)){
+                return User("admin", "Admin");
+        }else{
+        
         require(bytes(users[msg.sender].fullName).length > 0, "User not registered");
         return users[msg.sender];
+        }
     }
 
     // Accountant enters fee details
